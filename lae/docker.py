@@ -35,7 +35,8 @@ def main(args):
     shutil.rmtree(pwd + "/tmp")
     os.remove(pwd + '/Dockerfile')
     os.remove(pwd + '/cron_runner.py')
-    logger.info('Docker image [%s] build complete. Run command "docker run -ti -p your_port:470 %s " to up it!' % (appname, appname))
+    logger.info('Docker image [%s] build complete. '
+                'Run command "docker run -ti -p your_port:470 %s " to up it!' % (appname, appname))
 
 
 def deal_handlers(appcfg):
@@ -48,7 +49,6 @@ def deal_handlers(appcfg):
         # 处理各种类型的 url handler
         if 'static_dir' in handler:
             static_dir = handler.get('static_dir', 'static')
-            static_dir = static_dir[:str(static_dir).rfind('/')]
             nginx_url_conf = render_template("nginx_static_url", context=dict(path=url, appname=appname, static_dir=static_dir))
             nginx_urls.append(nginx_url_conf)
 

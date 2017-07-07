@@ -1,4 +1,4 @@
 location ^~ ${path} {
-        root /usr/local/${appname}/${static_dir};
+        alias /usr/local/${appname}/${static_dir};
         expires 30d;
     }
