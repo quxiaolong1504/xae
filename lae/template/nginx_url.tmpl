@@ -1,0 +1,4 @@
+location ^~ ${path} {
+        include uwsgi_params;
+        uwsgi_pass unix:/linkedsee/runtime/${appname}_${app}.sock;
+    }

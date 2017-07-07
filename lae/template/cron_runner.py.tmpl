@@ -1,0 +1,29 @@
+# -*- coding: utf8 -*-
+
+import sys
+
+maintainers_map = ${maintainers}
+
+
+def run(task_name, module, method):
+    """* * * * * python /usr/local/xxx/cron_runner.py task_name:xxxxx.xxxx:xxx"""
+    exec("from %s import %s" % (module, method))
+    func = locals().get(method, None)
+    if not func:
+        content = "no such %s method" % method
+        send_email(task_name, module, method, content)
+        exit(-1)
+    try:
+        func()
+    except Exception, e:
+        send_email(task_name, module, method, e.message)
+
+
+def send_email(task_name, module, method, content):
+    maintainers = maintainers_map.get(task_name, [])
+    # TODO send email to maintainers
+
+
+if __name__ == '__main__':
+    task_name, module, method = sys.argv[1].split(":")
+    run(task_name=task_name, module=module, method=method)

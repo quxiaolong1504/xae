@@ -1,0 +1,24 @@
+application: example
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /static/
+  static_dir: example/static
+- url: /test/*
+  wsgi_app: app:app_api
+- url: /.*
+  wsgi_app: app:web_app
+
+mqs:
+- name: test_mq
+  handler: example.taks.hello:hello_mq
+  maintainers: quxiaolong@yun-ji.cn
+  mem_limit: 1024M
+
+crons:
+- name: test_cron_task
+  handler: crons.hello_cron:hello
+  schedule: "*/30 * * * *"
+  maintainers: quxiaolong@yun-ji.cn, quxl@yun-ji.cn

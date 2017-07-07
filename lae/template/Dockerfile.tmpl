@@ -1,0 +1,38 @@
+FROM centos:7
+MAINTAINER Quxialong  "<quxiaolong@yun-ji.cn>"
+
+RUN yum -y install epel-release
+RUN yum install -y gcc python-pip mysql-devel zmap python-devel mysql nginx uwsgi uwsgi-plugin-python vixie-cron crontabs
+RUN pip install supervisor -i https://mirrors.aliyun.com/pypi/simple/
+
+# Setup flask application
+RUN mkdir -p /usr/local/${appname}
+COPY . /usr/local/${appname}
+RUN pip install -r /usr/local/${appname}/pip-req.txt -i https://mirrors.aliyun.com/pypi/simple/
+
+# Setup nginx
+COPY tmp/*nginx.conf /etc/nginx/conf.d/
+RUN echo 'daemon off;' >> /etc/nginx/nginx.conf
+
+# Setup uwsgi
+COPY tmp/*uwsgi.ini /usr/local/${appname}/
+
+# Setup supervisord
+COPY tmp/supervisord.conf /etc/
+
+# Setup crontab
+COPY tmp/crontabfile /usr/local/${appname}/
+RUN crontab /usr/local/${appname}/crontabfile
+
+# Create runtime pid & log dir
+RUN mkdir -p /linkedsee/logs/supervisord
+RUN mkdir -p /linkedsee/logs/app
+RUN mkdir -p /linkedsee/runtime/
+
+# Set environ
+RUN touch IN_DOCKER /
+
+EXPOSE 470
+
+# Start processes
+CMD ["/usr/bin/supervisord"]

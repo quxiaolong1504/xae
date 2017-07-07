@@ -1,0 +1,9 @@
+[program:${appname}_${app}]
+command     = /usr/sbin/uwsgi --ini /usr/local/${appname}/${app}_uwsgi.ini
+directory   = /usr/local/${appname}
+user        = root
+startsecs   = 3
+redirect_stderr         = true
+stdout_logfile_maxbytes = 50MB
+stdout_logfile_backups  = 10
+stdout_logfile          = /linkedsee/logs/app/${appname}_${app}.log

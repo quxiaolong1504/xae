@@ -1,0 +1,30 @@
+[uwsgi]
+#application's base folder
+base = /usr/local/${appname}
+
+#set buffer size  10m
+buffer-size = 10485760
+
+#python module to import
+module = ${module}
+app = ${app}
+
+plugins = python
+master = true
+
+pythonpath = %(base)
+
+#socket file's location
+socket = /linkedsee/runtime/${appname}_${app}.sock
+
+#permissions for the socket file
+chmod-socket = 666
+
+#the variable that holds a flask application inside the module imported at line #6
+callable = ${app}
+
+processes = 4
+
+threads = 2
+
+pidfile = /linkedsee/runtime/${appname}_${app}.pid

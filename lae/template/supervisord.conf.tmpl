@@ -1,0 +1,25 @@
+[supervisord]
+logfile=/linkedsee/logs/supervisord/supervisord.log
+logfile_maxbytes=50MB
+logfile_backups=10
+loglevel=info
+pidfile=/linkedsee/runtime/supervisord.pid
+minfds=1024
+minprocs=200
+user=root
+nodaemon=true
+
+${programs}
+
+[program:nginx]
+command     = /usr/sbin/nginx -c /etc/nginx/nginx.conf
+directory   = /tmp
+user        = root
+startsecs   = 3
+autorestart = true
+priority=999
+startretries            = 100
+stdout_logfile          = /linkedsee/logs/supervisord/nginx.log
+stdout_logfile_maxbytes = 10MB
+stdout_logfile_backups  = 10
+stderr_logfile          = /linkedsee/logs/supervisord/nginx_err.log
